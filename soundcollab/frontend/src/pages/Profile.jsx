@@ -217,9 +217,9 @@ export default function Profile() {
   return (
     <AppShell>
       {/* Banner */}
-      <div className="relative -mx-6 -mt-6 mb-8">
+      <div className="relative -mx-4 mb-6 sm:-mx-6 sm:-mt-6 sm:mb-8">
         <div
-          className="h-52 w-full bg-cover bg-center"
+          className="h-32 w-full bg-cover bg-center sm:h-52"
           style={bannerSrc ? { backgroundImage: `url(${bannerSrc})` } : { background: bannerGradient }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-spotify-base via-spotify-base/60 to-transparent" />
@@ -229,22 +229,22 @@ export default function Profile() {
             <button
               type="button"
               onClick={() => bannerInputRef.current?.click()}
-              className="absolute right-6 top-4 rounded-full bg-black/50 px-4 py-2 text-sm font-semibold backdrop-blur hover:bg-black/70"
+              className="absolute right-3 top-3 rounded-full bg-black/50 px-3 py-1.5 text-xs font-semibold backdrop-blur hover:bg-black/70 sm:right-6 sm:top-4 sm:px-4 sm:py-2 sm:text-sm"
             >
               Change banner
             </button>
           </>
         )}
-        <div className="absolute bottom-0 left-6 flex items-end gap-6 pb-4">
+        <div className="absolute bottom-0 left-3 flex flex-col items-start gap-2 pb-3 sm:left-6 sm:flex-row sm:items-end sm:gap-6 sm:pb-4">
           <div className="relative">
             {avatarSrc ? (
               <img
                 src={avatarSrc}
                 alt={profile.username}
-                className="h-40 w-40 shrink-0 rounded-full border-4 border-spotify-base object-cover shadow-card"
+                className="h-20 w-20 shrink-0 rounded-full border-4 border-spotify-base object-cover shadow-card sm:h-40 sm:w-40"
               />
             ) : (
-              <div className="flex h-40 w-40 shrink-0 items-center justify-center rounded-full border-4 border-spotify-base bg-spotify-highlight text-5xl font-black shadow-card">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-spotify-base bg-spotify-highlight text-3xl font-black shadow-card sm:h-40 sm:w-40 sm:text-5xl">
                 {profile.username?.[0]?.toUpperCase()}
               </div>
             )}
@@ -261,16 +261,16 @@ export default function Profile() {
               </>
             )}
           </div>
-          <div className="mb-2 min-w-0">
-            <p className="text-sm font-semibold uppercase tracking-widest text-spotify-muted">Artist</p>
-            <h1 className="text-4xl font-black">{profile.username}</h1>
-            <p className="mt-1 capitalize text-spotify-muted">{profile.role}</p>
+          <div className="mb-0 min-w-0 sm:mb-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-spotify-muted sm:text-sm">Artist</p>
+            <h1 className="text-2xl font-black sm:text-4xl">{profile.username}</h1>
+            <p className="mt-0.5 capitalize text-sm text-spotify-muted sm:mt-1">{profile.role}</p>
           </div>
         </div>
       </div>
 
-      <div className="mb-8 flex flex-wrap items-center gap-4">
-        <div className="flex gap-6 text-sm">
+      <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="flex gap-4 text-sm sm:gap-6">
           <span><strong className="text-white">{profile.followers_count}</strong> <span className="text-spotify-muted">followers</span></span>
           <span><strong className="text-white">{profile.following_count}</strong> <span className="text-spotify-muted">following</span></span>
         </div>
@@ -280,7 +280,7 @@ export default function Profile() {
             <span key={b} className="pill bg-accent/20 text-accent">{BADGE_LABELS[b] || b}</span>
           ))}
         </div>
-        <div className="ml-auto flex gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
           {isOwn ? (
             <button onClick={() => (editing ? cancelEdit() : setEditing(true))} className="btn-secondary !text-sm">
               {editing ? 'Cancel' : 'Edit Profile'}

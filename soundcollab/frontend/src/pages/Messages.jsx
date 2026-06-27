@@ -230,34 +230,41 @@ export default function Messages() {
     (tab === 'collab' && activeThread) ||
     (tab === 'groups' && activeGroupId);
 
+  const closeMobileChat = () => {
+    setActiveConvId(null);
+    setActiveThread(null);
+    setActiveGroupId(null);
+    setChat({ other_user: null, messages: [], members: [] });
+  };
+
   return (
     <AppShell>
-      <h1 className="mb-6 text-3xl font-black">Messages</h1>
+      <h1 className="mb-4 text-2xl font-black sm:mb-6 sm:text-3xl">Messages</h1>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <button
-          onClick={() => { setTab('dm'); setActiveThread(null); setActiveGroupId(null); }}
-          className={`btn text-sm ${tab === 'dm' ? 'btn-primary' : 'btn-secondary'}`}
-        >
-          Direct Messages
-        </button>
-        <button
-          onClick={() => { setTab('collab'); setActiveConvId(null); setActiveGroupId(null); }}
-          className={`btn text-sm ${tab === 'collab' ? 'btn-primary' : 'btn-secondary'}`}
-        >
-          Collab Threads
-        </button>
-        <button
-          onClick={() => { setTab('groups'); setActiveConvId(null); setActiveThread(null); }}
-          className={`btn text-sm ${tab === 'groups' ? 'btn-primary' : 'btn-secondary'}`}
-        >
-          Groups
-        </button>
+      <div className="mb-4 flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+        {[
+          { id: 'dm', label: 'DMs' },
+          { id: 'collab', label: 'Collabs' },
+          { id: 'groups', label: 'Groups' },
+        ].map(({ id, label }) => (
+          <button
+            key={id}
+            onClick={() => {
+              setTab(id);
+              if (id === 'dm') { setActiveThread(null); setActiveGroupId(null); }
+              if (id === 'collab') { setActiveConvId(null); setActiveGroupId(null); closeMobileChat(); }
+              if (id === 'groups') { setActiveConvId(null); setActiveThread(null); closeMobileChat(); }
+            }}
+            className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold ${tab === id ? 'bg-accent text-white' : 'glass'}`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      <div className="flex h-[calc(100vh-280px)] min-h-[420px] overflow-hidden rounded-xl border border-white/5 bg-spotify-elevated">
-        {/* Inbox */}
-        <div className="w-80 shrink-0 overflow-y-auto border-r border-white/10">
+      <div className="flex min-h-[calc(100dvh-14rem)] flex-col overflow-hidden rounded-xl border border-white/5 bg-spotify-elevated md:min-h-[420px] md:flex-row md:h-[calc(100vh-280px)]">
+        {/* Inbox — full width on mobile until chat opens */}
+        <div className={`w-full shrink-0 overflow-y-auto border-white/10 md:w-80 md:border-r ${hasActiveChat ? 'hidden md:block' : 'block'}`}>
           {tab === 'dm' ? (
             <>
               {friends.length > 0 && (
@@ -385,17 +392,25 @@ export default function Messages() {
         </div>
 
         {/* Chat */}
-        <div className="flex flex-1 flex-col">
+        <div className={`min-h-0 flex-1 flex-col ${hasActiveChat ? 'flex' : 'hidden md:flex'}`}>
           {opening ? (
             <div className="flex flex-1 items-center justify-center text-text-secondary">Opening chat...</div>
           ) : hasActiveChat ? (
             <>
-              <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
+              <div className="flex items-center gap-2 border-b border-white/10 px-3 py-3 sm:px-5 sm:py-4">
+                <button
+                  type="button"
+                  onClick={closeMobileChat}
+                  className="btn-ghost touch-target !p-2 md:hidden"
+                  aria-label="Back to inbox"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+                </button>
                 {tab === 'dm' && chat.other_user && (
                   <>
                     <UserAvatar user={chat.other_user} size="sm" />
-                    <div>
-                      <Link to={`/profile/${chat.other_user.id}`} className="font-bold hover:underline">
+                    <div className="min-w-0 flex-1">
+                      <Link to={`/profile/${chat.other_user.id}`} className="truncate font-bold hover:underline">
                         {chat.other_user.username}
                       </Link>
                       <p className="text-xs capitalize text-spotify-muted">{chat.other_user.role}</p>
@@ -476,16 +491,15 @@ export default function Messages() {
                 <div ref={bottomRef} />
               </div>
 
-              <form onSubmit={sendMessage} className="flex gap-2 border-t border-white/10 p-4">
-                <input type="file" accept="audio/*,.zip,.pdf" className="w-24 text-xs" onChange={(e) => setAttachment(e.target.files[0])} />
+              <form onSubmit={sendMessage} className="flex flex-col gap-2 border-t border-white/10 p-3 sm:flex-row sm:p-4">
+                <input type="file" accept="audio/*,.zip,.pdf" className="w-full text-xs sm:w-24" onChange={(e) => setAttachment(e.target.files[0])} />
                 <input
-                  className="input flex-1 text-sm"
+                  className="input min-w-0 flex-1 text-base sm:text-sm"
                   placeholder={tab === 'groups' ? 'Message the group...' : `Message ${chat.other_user?.username || '...'}`}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  autoFocus
                 />
-                <button type="submit" className="btn-primary text-sm">Send</button>
+                <button type="submit" className="btn-primary shrink-0 text-sm">Send</button>
               </form>
             </>
           ) : (

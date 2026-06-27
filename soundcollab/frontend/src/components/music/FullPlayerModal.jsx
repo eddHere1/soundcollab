@@ -69,24 +69,24 @@ export default function FullPlayerModal() {
     <div className="fixed inset-0 z-[100] flex flex-col bg-base">
       <QueueDrawer />
       <div className="pointer-events-none absolute inset-0 bg-hero-glow" />
-      <div className="flex items-center justify-between px-6 py-4">
-        <button onClick={closeFullPlayer} className="btn-ghost !px-3" aria-label="Close">
+      <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <button onClick={closeFullPlayer} className="btn-ghost touch-target !px-3" aria-label="Close">
           <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M19 9l-7 7-7-7" />
           </svg>
         </button>
         <span className="text-xs font-semibold uppercase tracking-widest text-text-secondary">Now Playing</span>
-        <button onClick={() => setShowQueue(true)} className="btn-ghost !px-3 text-sm" title="Queue">
+        <button onClick={() => setShowQueue(true)} className="btn-ghost touch-target !px-2 text-xs sm:!px-3 sm:text-sm" title="Queue">
           Queue ({queue.length})
         </button>
       </div>
 
       <div className="flex flex-1 flex-col overflow-hidden lg:flex-row">
-        <div className="flex flex-1 flex-col items-center justify-center px-8 pb-4">
-          <div className="mb-8 w-full max-w-sm">
+        <div className="flex flex-1 flex-col items-center justify-center px-4 pb-4 sm:px-8">
+          <div className="mb-4 w-full max-w-[280px] sm:mb-8 sm:max-w-sm">
             <CoverArt seed={post.id} type={post.type} coverUrl={track.coverUrl} size="grid" className="!aspect-square shadow-glow" />
           </div>
-          <h2 className="mb-1 text-center text-2xl font-black">{track.title}</h2>
+          <h2 className="mb-1 text-center text-xl font-black sm:text-2xl">{track.title}</h2>
           <Link to={`/profile/${track.userId}`} onClick={closeFullPlayer} className="mb-6 text-text-secondary hover:text-accent">
             {track.artist}
           </Link>
@@ -171,7 +171,7 @@ export default function FullPlayerModal() {
         </div>
 
         <div className="flex w-full flex-col border-t border-white/10 lg:w-96 lg:border-l lg:border-t-0">
-          <div className="border-b border-white/10 px-4 py-3 font-semibold">
+          <div className="border-b border-white/10 px-4 py-3 font-semibold sm:px-4">
             Comments ({comments.length})
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-3">

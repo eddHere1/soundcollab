@@ -24,20 +24,20 @@ export default function Navbar() {
     }`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] glass-strong">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2 shrink-0">
+    <header className="sticky top-0 z-50 border-b border-white/[0.06] glass-strong safe-bottom">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-4 sm:h-16 sm:px-6 lg:px-8">
+        <Link to="/" className="flex min-w-0 shrink-0 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">
             <svg className="h-4 w-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
             </svg>
           </div>
-          <span className="font-heading text-lg font-bold tracking-tight">
+          <span className="truncate font-heading text-base font-bold tracking-tight sm:text-lg">
             Sound<span className="text-accent">Collab</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {navLinks.map(({ to, label, end }) => (
             <NavLink key={to} to={to} end={end} className={linkClass}>
               {({ isActive }) => (
@@ -52,19 +52,20 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 sm:gap-3 lg:flex">
           {user && <NotificationBell />}
-          <Link to="/upload" className="btn-primary !rounded-full !px-5 !py-2 !text-xs">
+          <Link to="/upload" className="btn-primary !rounded-full !px-4 !py-2 !text-xs xl:!px-5">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16" />
             </svg>
-            Upload Beat
+            <span className="hidden xl:inline">Upload Beat</span>
+            <span className="xl:hidden">Upload</span>
           </Link>
           {user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <NavLink
                 to={`/profile/${user.id}`}
-                className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition hover:bg-white/5"
+                className="flex touch-target items-center justify-center rounded-xl px-2 py-1.5 transition hover:bg-white/5"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-accent to-cyan text-xs font-bold text-white">
                   {user.username?.[0]?.toUpperCase()}
@@ -80,20 +81,24 @@ export default function Navbar() {
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="btn-icon !h-9 !w-9 md:hidden"
-          aria-label="Menu"
-        >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            {mobileOpen ? <path d="M6 18L18 6M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
-          </svg>
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          {user && <NotificationBell />}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="btn-icon !h-10 !w-10 touch-target"
+            aria-label="Menu"
+            aria-expanded={mobileOpen}
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              {mobileOpen ? <path d="M6 18L18 6M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-white/[0.06] px-4 py-4 md:hidden animate-fade-in">
+        <div className="max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-white/[0.06] px-4 py-4 lg:hidden animate-fade-in">
           <nav className="flex flex-col gap-1">
             {navLinks.map(({ to, label, end }) => (
               <NavLink
@@ -102,7 +107,7 @@ export default function Navbar() {
                 end={end}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `rounded-xl px-4 py-3 text-sm font-medium ${
+                  `touch-target rounded-xl px-4 py-3 text-sm font-medium ${
                     isActive ? 'bg-accent/15 text-accent' : 'text-text-secondary'
                   }`
                 }
@@ -113,7 +118,26 @@ export default function Navbar() {
             <Link to="/upload" onClick={() => setMobileOpen(false)} className="btn-primary mt-2 w-full">
               Upload Beat
             </Link>
-            {!user && (
+            {user ? (
+              <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
+                <Link
+                  to={`/profile/${user.id}`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex touch-target items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/5"
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-accent to-cyan text-sm font-bold text-white">
+                    {user.username?.[0]?.toUpperCase()}
+                  </div>
+                  <span className="font-semibold">{user.username}</span>
+                </Link>
+                <button
+                  onClick={() => { logout(); setMobileOpen(false); }}
+                  className="btn-secondary w-full"
+                >
+                  Log out
+                </button>
+              </div>
+            ) : (
               <div className="mt-2 flex gap-2">
                 <Link to="/login" onClick={() => setMobileOpen(false)} className="btn-secondary flex-1">Log in</Link>
                 <Link to="/register" onClick={() => setMobileOpen(false)} className="btn-primary flex-1">Sign up</Link>

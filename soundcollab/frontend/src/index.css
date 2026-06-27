@@ -3,12 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     min-height: 100vh;
+    min-height: 100dvh;
     background-color: #0B0B0F;
     color: #F5F5F5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   ::-webkit-scrollbar {
@@ -42,9 +48,11 @@
   .glass-card {
     @apply glass rounded-2xl transition-all duration-300;
   }
-  .glass-card:hover {
-    @apply border-accent/30 shadow-glow;
-    transform: translateY(-2px);
+  @media (hover: hover) {
+    .glass-card:hover {
+      @apply border-accent/30 shadow-glow;
+      transform: translateY(-2px);
+    }
   }
 
   .neon-text {
@@ -61,6 +69,7 @@
 
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40;
+    min-height: 44px;
   }
   .btn-primary {
     @apply btn bg-accent text-white shadow-glow hover:bg-accent-hover hover:shadow-glow-lg hover:scale-[1.02];
@@ -98,7 +107,8 @@
   }
 
   .input {
-    @apply w-full rounded-xl border border-white/[0.08] bg-surface px-4 py-3 text-text-primary transition focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50;
+    @apply w-full rounded-xl border border-white/[0.08] bg-surface px-4 py-3 text-base text-text-primary transition focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50;
+    min-height: 44px;
   }
   .input::placeholder {
     color: #6B7280;
@@ -163,6 +173,21 @@
 }
 
 @layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pb-player {
+    padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 768px) {
+    .pb-player {
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
   .animate-fade-in {
     animation: fadeIn 0.4s ease-out;
   }

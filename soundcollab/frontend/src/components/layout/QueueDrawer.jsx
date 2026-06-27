@@ -9,10 +9,10 @@ export default function QueueDrawer() {
   return (
     <>
       <div className="fixed inset-0 z-[60] bg-black/50" onClick={() => setShowQueue(false)} />
-      <aside className="fixed bottom-[72px] right-0 top-16 z-[110] w-full max-w-sm glass-strong border-l border-white/10 shadow-glow flex flex-col animate-slide-up md:bottom-[80px]">
+      <aside className="fixed inset-x-0 bottom-0 top-14 z-[110] flex max-h-[85dvh] flex-col glass-strong border-t border-white/10 shadow-glow animate-slide-up safe-bottom md:inset-x-auto md:bottom-20 md:left-auto md:right-0 md:top-16 md:max-h-none md:w-full md:max-w-sm md:border-l md:border-t-0">
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
           <h3 className="font-heading font-semibold">Queue</h3>
-          <button onClick={() => setShowQueue(false)} className="btn-ghost !p-1">✕</button>
+          <button onClick={() => setShowQueue(false)} className="btn-ghost touch-target !p-2" aria-label="Close queue">✕</button>
         </div>
         <div className="flex-1 overflow-y-auto p-2">
           {queue.length === 0 ? (
@@ -27,8 +27,8 @@ export default function QueueDrawer() {
                   playTrack(item, queue, false);
                   if (!playing) togglePlay();
                 }}
-                className={`flex w-full items-center gap-3 rounded-xl p-2 text-left transition ${
-                  isActive ? 'bg-accent/15' : 'hover:bg-white/5'
+                className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition touch-target ${
+                  isActive ? 'bg-accent/15' : 'hover:bg-white/5 active:bg-white/10'
                 }`}
               >
                 <CoverArt seed={item.id} type={item.type} coverUrl={item.coverUrl} size="sm" className="!h-10 !w-10 !rounded-lg" />
@@ -36,9 +36,7 @@ export default function QueueDrawer() {
                   <p className={`truncate text-sm font-medium ${isActive ? 'text-accent' : ''}`}>{item.title}</p>
                   <p className="truncate text-xs text-text-secondary">{item.artist}</p>
                 </div>
-                {playing && (
-                  <span className="text-xs text-accent">▶</span>
-                )}
+                {playing && <span className="text-xs text-accent">▶</span>}
               </button>
             );
           })}

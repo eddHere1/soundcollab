@@ -154,11 +154,11 @@ export default function PostCard({ post, onUpdate, variant = 'feed', queue = [] 
   return (
     <>
       <article
-        className="glass-card flex cursor-pointer gap-4 !p-4"
+        className="glass-card flex cursor-pointer flex-col gap-3 !p-3 sm:flex-row sm:gap-4 sm:!p-4"
         onClick={handleCardClick}
       >
-        <div className="relative shrink-0">
-          <CoverArt seed={post.id} type={post.type} coverUrl={coverUrl} size="sm" className="!h-28 !w-28 rounded-md" />
+        <div className="relative shrink-0 self-start">
+          <CoverArt seed={post.id} type={post.type} coverUrl={coverUrl} size="sm" className="!h-20 !w-20 rounded-md sm:!h-28 sm:!w-28" />
           <button onClick={handlePlayBtn} data-no-play className="btn-icon absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {playing ? (
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
